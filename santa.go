@@ -1,14 +1,12 @@
 package main
 
 import (
-	//"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 )
 
 func santaHandler(w http.ResponseWriter, r *http.Request) {
-	//fmt.Printf("got request for %s\n", r.URL.Path[1:])
 
 	if r.Method == "POST" {
 
@@ -23,8 +21,6 @@ func santaHandler(w http.ResponseWriter, r *http.Request) {
 		body, _ := ioutil.ReadAll(r.Body)
 
 		bodyString := string(body)
-
-		//fmt.Printf("got request for %s, body: %s\n", r.URL.Path[1:], bodyString)
 
 		age := getWrappingAge(bodyString, timestamp, hash, key)
 

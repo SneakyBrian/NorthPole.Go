@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"fmt"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -13,7 +12,6 @@ type ElfResponse struct {
 }
 
 func elfHandler(w http.ResponseWriter, r *http.Request) {
-	//fmt.Printf("got request for %s\n", r.URL.Path[1:])
 
 	if r.Method == "POST" {
 
@@ -25,8 +23,6 @@ func elfHandler(w http.ResponseWriter, r *http.Request) {
 		body, _ := ioutil.ReadAll(r.Body)
 
 		bodyString := string(body)
-
-		//fmt.Printf("got request for %s, body: %s\n", r.URL.Path[1:], bodyString)
 
 		hash, timestamp := getWrapping(bodyString, key)
 

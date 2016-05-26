@@ -25,7 +25,6 @@ func main() {
 	http.HandleFunc("/elf/", elfHandler)
 	http.HandleFunc("/santa/", santaHandler)
 
-	//http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	http.Handle("/static/", http.FileServer(FS(*useLocalPtr)))
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *portNumPtr), nil))
