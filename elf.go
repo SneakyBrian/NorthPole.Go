@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type ElfResponse struct {
+type elfResponse struct {
 	Hash      string
 	Timestamp int64
 }
@@ -26,7 +26,7 @@ func elfHandler(w http.ResponseWriter, r *http.Request) {
 
 		hash, timestamp := getWrapping(bodyString, key)
 
-		response := ElfResponse{hash, timestamp}
+		response := elfResponse{hash, timestamp}
 
 		b, _ := json.Marshal(response)
 
