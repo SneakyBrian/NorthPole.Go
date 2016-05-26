@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>North Pole Test Page</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+</head>
+<body>
+    <h1>North Pole Test Page</h1>
+    
+    <p>Enter some data:</p>
+    <textarea id="input" cols="40" rows="10">This is some test data</textarea>
+    
+    <p>Enter your unique key:</p>
+    <input id="key" type="text" value="some unique key" style="width: 100%;" />
+    
+    <p>Timestamp:</p>
+    <input id="timestamp" type="text" style="width: 100%;" />
+    
+    <p>hash:</p>
+    <input id="hash" type="text" style="width: 100%;" />
+    
+    <p>Verify result: <span id="result"></span></p>
+    
+    <input id="generate" type="button" value="Generate Hash" />
+    <input id="verify" type="button" value="Verify Hash" />
+	<input id="benchmark" type="button" value="Benchmark" />
+	
+	<p id="benchmarkcontainer" style="display:none;">Benchmark: <span id="benchmarkresult"></span></p>
+
+    <script type="text/javascript">
+        $(function () {
+
+            $('#generate').click(function () {
+                $('#result').text('');
+                $.post('/elf/?key=' + $('#key').val(),
+                    $('#input').val(),
+                    function (data) {
+                        var res = JSON.parse(data);
+                        $('#timestamp').val(res.Timestamp);
+                        $('#hash').val(res.Hash);
+                    }, 'text');
+            });
+
+            $('#verify').click(function () {
+                $.post('/santa/?key=' + $('#key').val() + '&timestamp=' + $('#timestamp').val() + '&hash=' + encodeURIComponent($('#hash').val()),
+                    $('#input').val(),
+                    function (result) {
+                        $('#result').text(result);
+                    }, 'text');
+            });
+			
+            $('#benchmark').click(function () {
+				var start = new Date().getTime(),
+					posts = 0,
+					$result = $('#benchmarkresult'),
+					doPost = function(){
+
+					$.post('/elf/?key=benchmark_key',
+						'benchmark_data',
+						function (data) {
+							var elapsed = (new Date().getTime() - start) / 1000;
+							posts += 1;
+							$result.text('elf hashes per second: ' + (posts / elapsed));
+							doPost();
+						}, 'text');
+				};
+				
+				$(':button').prop("disabled",true);
+                $('#benchmarkcontainer').show();
+
+				doPost();
+            });
+        });
+    </script>
+
+</body>
+</html>
